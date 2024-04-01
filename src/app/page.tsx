@@ -1,4 +1,10 @@
-import Image from "next/image";
+"use client";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const privacyPolicies = [
   {
@@ -19,7 +25,23 @@ const privacyPolicies = [
   },
 ];
 
+const schema = z.object({
+  name: z.string().min(1, { message: "Name cannot be empty." }),
+  email: z.string().min(1, { message: "Email cannot be empty." }).email("This is not a valid email."),
+  message: z.string().min(1, { message: "Message cannot be empty." }),
+});
+
 export default function Home() {
+  const form = useForm({
+    resolver: zodResolver(schema),
+    mode: "onChange",
+    defaultValues: {
+      name: "",
+      email: "",
+      message: "",
+    },
+  });
+
   return (
     <main className="flex min-h-screen flex-col gap-y-16 items-center px-4 py-12 md:py-24 max-w-[700px] mx-auto">
       <div className="flex items-center gap-x-2">
@@ -38,30 +60,57 @@ export default function Home() {
           </div>
         ))}
       </div>
-      <form className="w-full flex flex-col gap-y-4 items-stretch" action="https://getform.io/f/nbdeeeya" method="POST">
-        <h2 className="text-center text-xl font-semibold">Contact Us</h2>
-        <div className="flex flex-col">
-          <label htmlFor="name" className="text-sm text-gray-800">
-            Name
-          </label>
-          <input type="text" name="name" className="border p-2"></input>
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="name" className="text-sm text-gray-800">
-            E-mail
-          </label>
-          <input type="email" name="email" className="border p-2"></input>
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="name" className="text-sm text-gray-800">
-            Message
-          </label>
-          <textarea name="message" className="border h-32 p-2"></textarea>
-        </div>
-        <button type="submit" className="bg-primary-900 font-semibold text-white rounded-md py-2 min-w-24">
-          Send
-        </button>
-      </form>
+
+      <Form {...form}>
+        <form action="https://getform.io/f/nbdeeeya" method="POST" className="mx-auto w-full flex flex-col gap-y-4">
+          <h2 className="text-center text-xl font-semibold">Contact Us</h2>
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field, fieldState }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input autoFocus type="text" className={fieldState.invalid ? "border-error-900" : ""} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field, fieldState }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input autoFocus type="email" className={fieldState.invalid ? "border-error-900" : ""} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="message"
+            render={({ field, fieldState }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Message</FormLabel>
+                <FormControl>
+                  <textarea
+                    className={`border h-32 p-2 ${fieldState.invalid ? "border-error-900" : ""}`}
+                    {...field}
+                  ></textarea>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" disabled={!form.formState.isValid}>
+            Send
+          </Button>
+        </form>
+      </Form>
     </main>
   );
 }

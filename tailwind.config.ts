@@ -41,6 +41,7 @@ const config: Config = {
           800: "#5A5F62",
           900: "#1F2324",
         },
+        destructive: "#DD224F",
       },
     },
   },
