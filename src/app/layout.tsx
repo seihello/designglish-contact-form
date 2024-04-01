@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Signika_Negative } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Signika_Negative({ weight: "400", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Designglish Support",
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`bg-primary-100 ${inter.className}`}>{children}</body>
+      <body className={`bg-primary-100 text-gray-900 ${inter.className}`}>{children}</body>
     </html>
   );
 }

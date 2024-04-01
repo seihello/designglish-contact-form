@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 const privacyPolicies = [
   {
@@ -97,10 +98,7 @@ export default function Home() {
               <FormItem className="flex flex-col">
                 <FormLabel>Message</FormLabel>
                 <FormControl>
-                  <textarea
-                    className={`border h-32 p-2 ${fieldState.invalid ? "border-error-900" : ""}`}
-                    {...field}
-                  ></textarea>
+                  <Textarea className={fieldState.invalid ? "border-error-900" : ""} {...field}></Textarea>
                 </FormControl>
                 <FormMessage />
               </FormItem>
